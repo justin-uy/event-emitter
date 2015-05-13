@@ -1,8 +1,6 @@
 'use strict';
 
-var d        = require('d')
-  , callable = require('es5-ext/object/valid-callable')
-
+var callable = require('es5-ext/object/valid-callable')
   , apply = Function.prototype.apply, call = Function.prototype.call
   , create = Object.create, defineProperty = Object.defineProperty
   , defineProperties = Object.defineProperties
@@ -118,10 +116,18 @@ methods = {
 };
 
 descriptors = {
-	on: d(on),
-	once: d(once),
-	off: d(off),
-	emit: d(emit)
+	on: {
+    value: on
+  },
+	once: {
+    value: once
+  },
+	off: {
+    value: off
+  },
+	emit: {
+    value: emit
+  }
 };
 
 base = defineProperties({}, descriptors);

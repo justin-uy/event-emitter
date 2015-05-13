@@ -3,7 +3,6 @@
 var aFrom          = require('es5-ext/array/from')
   , remove         = require('es5-ext/array/#/remove')
   , value          = require('es5-ext/object/valid-object')
-  , d              = require('d')
   , emit           = require('./').methods.emit
 
   , defineProperty = Object.defineProperty
@@ -14,20 +13,35 @@ module.exports = function (e1, e2/*, name*/) {
 	var pipes, pipe, desc, name;
 
 	(value(e1) && value(e2));
+
 	name = arguments[2];
-	if (name === undefined) name = 'emit';
+
+	if (name === undefined) { name = 'emit' };
 
 	pipe = {
 		close: function () { remove.call(pipes, e2); }
 	};
+
 	if (hasOwnProperty.call(e1, '__eePipes__')) {
 		(pipes = e1.__eePipes__).push(e2);
 		return pipe;
 	}
-	defineProperty(e1, '__eePipes__', d('c', pipes = [e2]));
+
+  pipes = [e2];
+
+	defineProperty(e1, '__eePipes__', {
+    value: pipes,
+    configurable: true,
+    enumerable: false,
+    writable: false
+  });
+
 	desc = getOwnPropertyDescriptor(e1, name);
+
 	if (!desc) {
-		desc = d('c', undefined);
+		desc = {
+      value: undefined
+    };
 	} else {
 		delete desc.get;
 		delete desc.set;
